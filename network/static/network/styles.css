@@ -1,0 +1,44 @@
+
+textarea {
+    resize: none;
+    min-width: 325px;
+    max-width: 600px;
+}
+
+.npdiv {
+    border: 1px solid #ccc;
+    margin: 20px;
+    padding: 10px;
+}
+
+.footer {
+    display: flex;
+    height: 100vh;
+    align-items: flex-end;
+    color: white;
+}
+
+.post {
+    border: 1px solid #ccc;
+    border-radius: 1px;
+    margin: 0px 10px 5px 10px;
+    padding: 10px;
+}
+
+.button {
+    display: none;
+
+}
+
+.h1 {
+    margin-left: 10px;
+}
+
+.nf {
+    display: flex;
+    flex-direction: row;
+}
+
+.profile {
+    margin-left: 10px;
+}

@@ -1,0 +1,17 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+        Edit Blog 
+{% endblock %}
+
+    
+
+{% block body %}
+    <form action="{% url 'save' %}" method="POST">
+        {% csrf_token %}
+        <div>{{blogName}}</div>
+        <div><textarea name="content" placeholder="Content in Markdown Blog" >{{currBlog}}</textarea></div>
+        <div><input type="hidden" name="title" value="{{blogName}}"></div>
+        <div><input type="submit" value="save"></div>
+      </form>
+{% endblock %}

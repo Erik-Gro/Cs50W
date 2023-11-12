@@ -1,0 +1,22 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+    {% for active in actives %}
+    <div class="row max-6">
+    <div class="card" style="width: 18rem;">
+        <img src="{{active.image}}" class="card-img-top" alt="{{active.title}}">
+        <div class="card-body">
+            <h5 class="card-title">{{active.title}}</h5>
+            {% if active.bid.bid_price > active.price %}
+            <h5 class="card-title">{{active.bid.bid_price}}$</h5>
+            {% else %}
+            <h5 class="card-title">{{active.price}}$</h5>
+            {% endif %}
+            <p class="card-text">{{active.description}}</p>
+            <a href="{% url 'showListing' item=active.title%}" class="btn btn-primary">view page</a>
+          </div>
+      </div>
+    {% endfor %}
+</div>
+{% endblock %}

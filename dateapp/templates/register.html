@@ -1,0 +1,51 @@
+
+{% extends "layout.html" %}
+{% block body %}
+<div class="login-form align-middle">
+<form action="{% url 'register' %}" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label class="white" for="exampleInputEmail1">Username</label>
+        <input type="text" name="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Username">
+      </div>
+    <div class="form-group">
+      <label class="white" for="exampleInputEmail1">Email address</label>
+      <input type="text" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Email">
+    </div>
+    <div class="form-group">
+      <label class="white" for="exampleInputPassword1" >Password</label>
+      <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+    </div>
+    <div class="form-group">
+        <label class="white" for="exampleInputPassword1" >Confirmation</label>
+        <input type="password" name="confirmation" class="form-control" id="exampleInputPassword1" placeholder="Confirm password">
+      </div>
+    <div class="form-check">
+    </div>
+    <div class="form-group">
+      <label class="white" for="exampleInputPassword1" >Provide image URL for your profile</label>
+      <input type="text" name="image" class="form-control" id="exampleInputPassword1" placeholder="Gender">
+    </div>
+    <div>
+    <select name="gender" class="form-select" aria-label="Default select example">
+      <option selected>Select your gender</option>
+      <option value="1">male</option>
+      <option value="2">female</option>
+      <!-- <option value="3">alien</option> -->
+    </select>
+  </div>
+  <div>
+    <select name="preference" class="form-select" aria-label="Default select example">
+      <option selected>Select gender you seek</option>
+      <option value="3">male</option>
+      <option value="4">female</option>
+      <!-- <option value="3">alien</option> -->
+    </select>
+  </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <div class="white">
+        Already have an account? <a href="{% url 'login' %}">Log In here.</a>
+      </div>
+  </form>
+</div>
+{% endblock %}

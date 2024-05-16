@@ -1,0 +1,22 @@
+
+{% extends "layout.html" %}
+{% block body %}
+<div class="login-form align-middle">
+<form action="{% url 'login' %}" method="post">
+    {% csrf_token %}
+    <select name = "drop1" class="form-select" aria-label="Default select example">
+        <option selected>Your gender</option>
+        <option value="1">male</option>
+        <option value="2">female</option>
+        <option value="3">alien</option>
+      </select>
+      <select name = "drop2" class="form-select" aria-label="Default select example">
+        <option selected>Your prefrence?</option>
+        <option value="1">male</option>
+        <option value="2">female</option>
+        <option value="3">alien</option>
+      </select>
+      <button type="submit" class="btn btn-primary btn-sm">submit</button>
+  </form>
+</div>
+  {% endblock %}

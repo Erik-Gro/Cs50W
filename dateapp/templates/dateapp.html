@@ -1,0 +1,41 @@
+{% load static %}
+
+
+<html>
+    <head>
+        <link rel="stylesheet" href="{% static 'main.css' %}">
+        <script defer src="{% static 'main.js' %}"></script>   
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+<body>
+    <div class="main">
+    <div class="leftsection">
+        <h1 class="chat" onclick="findmatches('{{ user.id}}')">
+            Find Matches
+        </h1 >
+        {% for c in chatrooms %}
+        <h1 class="chat" onclick="loadmessages('{{ c.id}}')">
+            {% if c.members.first == request.user %}
+            <img style="height: 40px ;" src="{{c.members.last.image}}" alt="">
+            {{c.members.last.username}}
+            {% else %}
+            <img style="height: 40px ;" src="{{c.members.first.image}}" alt="">
+            {{c.members.first.username}}
+            {% endif %}
+        </h1>
+        {% endfor %}
+    </div>
+        <div class="rightsection">
+        <div class="anketessec"></div>
+        <div>
+        <div class="messagesection">
+        </div>
+        <div class="divtextarea" style="display: none;">
+            <textarea class="textarea" name="textarea" row="20rem" cols="35rem" id="" ></textarea>
+            <div>
+                <button onclick="sendmess()" class="btn btn-primary">Send</button>
+            </div>
+        </div>
+</div>
+</body>
+</html>

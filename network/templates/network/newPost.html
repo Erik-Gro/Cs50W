@@ -1,14 +1,19 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    <div class="npdiv">
-        <h1>New post</h1>
+<div class="container mt-5">
+    <div class="npdiv bg-light p-4 rounded shadow-sm">
+        <h1 class="text-center mb-4">Create a New Post</h1>
         <form action="{% url 'newPost' %}" method="post">
             {% csrf_token %}
-        <textarea name="content"></textarea>
-        <div>
-        <input type="submit" class="btn btn-primary" type="reset" value="Post">
-        </div>
+            <div class="form-group text-center">
+                <!-- Centering the textarea -->
+                <textarea name="content" class="form-control" rows="5" placeholder="What's on your mind?" style="text-align: center;"></textarea>
+            </div>
+            <div class="text-center mt-3">
+                <input type="submit" class="btn btn-primary btn-lg" value="Post">
+            </div>
         </form>
     </div>
+</div>
 {% endblock %}

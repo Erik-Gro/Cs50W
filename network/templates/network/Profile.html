@@ -1,90 +1,87 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    <div class="profile">
-    <h1>{{owner.username}}</h1>
-    <h2>has {{subs}} followers</h2>
-    <h3>and follows {{hefollows}} users</h3>
-    <!-- <h4>{{userfollow}}</h4> -->
-    {% if owner != user%}
-    <button id="btn{{owner.id}}" onclick="toggleFollow('{{ owner.id }}')" type="button" class=
-    {% if owner in userfollow %}
-        "btn btn-outline-danger"
-        {% else %}
-        "btn btn-outline-success"
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h1 class="display-4">{{ owner.username }}</h1>
+        <h2 class="text-muted">Followers: {{ subs }} | Following: {{ hefollows }}</h2>
+        {% if owner != user %}
+        <button id="btn{{ owner.id }}" onclick="toggleFollow('{{ owner.id }}')" type="button" class="
+            {% if owner in userfollow %}
+                btn btn-danger
+            {% else %}
+                btn btn-success
+            {% endif %}
+        btn-lg mt-3">
+            {% if owner in userfollow %}
+                Unfollow
+            {% else %}
+                Follow
+            {% endif %}
+        </button>
         {% endif %}
-    >
-        {% if owner in userfollow %}
-        unfollow
-        {% else %}
-        follow
-        {% endif %}
-    </button>
-</div>
-    {% endif %}
-    <h1 class="h1">{{owner.username}} posts</h1>
-    <h1>{{test}}</h1>
+    </div>
+
+    <h2 class="text-center">Posts by {{ owner.username }}</h2>
+
     {% for Post in Posts %}
-    <div class="post">
-      <div>
-        <a href="{% url 'Profile' id=Post.id page=1 %}">
-      <h1>
-        {{Post.owner.username}}
-      </h1>
-    </a>
-    </div>
-      <h1>{{Post.id}}</h1>
-      <h2 class="content{{Post.id}}">{{Post.content}}</h2>
-      <div class="form{{Post.id}}" style="display:none">
-      <textarea class="textarea{{Post.id}}" name="textcontent{{Post.id}}" ></textarea>
-      <div>
-      <button onclick="save('{{ Post.id }}')" type="button" class="btn btn-outline-success">save</button>
-      <button onclick="cloz('{{ Post.id }}')" type="button" class="btn btn-outline-danger">close</button>
-    </div>
-    </div>
-      <h2>{{Post.date}}</h2>
-      <div onclick="like('{{ Post.id }}')">
-      <svg class="img{{Post.id}}"
-      {% if user in Post.likes.all %}
-      style="color: red;"
-      {% endif %}
-      xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-        <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-      </svg>
-      <span class="likes-count{{Post.id}}">{{Post.likes.count}}</span>
-    </div>
-      {% if user == Post.owner %}
-      <div class="button{{Post.id}}">
-      <button onclick="edit('{{ Post.id }}')" type="button" class="btn btn-outline-primary btn{{Post.id}}">edit</button>
-      </div>
-      {% endif %}
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">{{ Post.owner.username }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ Post.date }}</h6>
+            <p class="card-text content{{ Post.id }}">{{ Post.content }}</p>
+
+            <div class="d-flex justify-content-between align-items-center">
+                <div onclick="like('{{ Post.id }}')" class="like-button">
+                    <svg class="img{{ Post.id }}"
+                         {% if user in Post.likes.all %} style="color: red;" {% endif %}
+                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                        <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                    </svg>
+                    <span class="likes-count">{{ Post.likes.count }}</span>
+                </div>
+
+                {% if user == Post.owner %}
+                <button onclick="edit('{{ Post.id }}')" type="button" class="btn btn-primary">Edit</button>
+                {% endif %}
+            </div>
+            <div class="form{{ Post.id }}" style="display:none" class="mt-3">
+                <textarea class="textarea{{ Post.id }}" name="textcontent{{ Post.id }}" placeholder="Edit your post..." rows="3"></textarea>
+                <div class="mt-2">
+                    <button onclick="save('{{ Post.id }}')" type="button" class="btn btn-success">Save</button>
+                    <button onclick="cloz('{{ Post.id }}')" type="button" class="btn btn-danger">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
     {% endfor %}
-    <nav aria-label="...">
-      {% if Posts.has_other_pages %}
-      <ul class="pagination">
-          {% if Posts.has_previous %}
-        <li class="page-item ">
-          <a class="page-link" href="{% url 'allPosts' page=Posts.previous_page_number %}" tabindex="-1" >Previous</a>
-        </li>
-          {% endif %}
-          {% for p in Posts.paginator.page_range %}
-          {% if Posts.number == p %}
-          <li class="page-item active">
-            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">{{p}}</a>
-          </li>
-          {% elif p >= Posts.number|add:-1 and p <= Posts.number|add:1 %}
-          <li class="page-item ">
-            <a class="page-link" href="{% url 'allPosts' page=p %}" tabindex="-1" aria-disabled="true">{{p}}</a>
-          </li>
-          {% endif %}
-        {% endfor %}
-        {% if Posts.has_next %}
-        <li class="page-item">
-          <a class="page-link" href="{% url 'allPosts' page=Posts.next_page_number %}">Next</a>
-        </li>
+
+    <nav aria-label="Page navigation">
+        {% if Posts.has_other_pages %}
+        <ul class="pagination justify-content-center">
+            {% if Posts.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="{% url 'allPosts' page=Posts.previous_page_number %}" tabindex="-1">Previous</a>
+            </li>
+            {% endif %}
+            {% for p in Posts.paginator.page_range %}
+            {% if Posts.number == p %}
+            <li class="page-item active">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">{{ p }}</a>
+            </li>
+            {% elif p >= Posts.number|add:-1 and p <= Posts.number|add:1 %}
+            <li class="page-item">
+                <a class="page-link" href="{% url 'allPosts' page=p %}">{{ p }}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+            {% if Posts.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="{% url 'allPosts' page=Posts.next_page_number %}">Next</a>
+            </li>
+            {% endif %}
+        </ul>
         {% endif %}
-      </ul>
     </nav>
-    {% endif %}
+</div>
 {% endblock %}

@@ -172,15 +172,21 @@ def Profile(request,id,page):
                 "Posts": getPosts,
             })
     
-def Followposts(request,page):
-    if  request.user.is_authenticated:
-        # id = request.user.id
-        # user = User.objects.get(pk=id)
-        listingfollowing = Post.objects.exclude(owner=request.user).order_by('-date')
-        # listOfpage = Post.objects.filter(owner=owner).order_by('-date')
-        paginator = Paginator(listingfollowing, 10)
+def Followposts(request, page):
+    if request.user.is_authenticated:
+        # Get the list of users that the current user is following
+        following_list = Following.objects.get(user=request.user).userFollowing.all()
+        
+        # Fetch posts from users that are in the following list
+        listing_following_posts = Post.objects.filter(owner__in=following_list).order_by('-date')
+        
+        # Paginate the posts
+        paginator = Paginator(listing_following_posts, 10)
         getPosts = paginator.get_page(page)
-        return render(request, "network/allPosts.html", {
-                "Posts": getPosts,
-            })
-    else: return
+        
+        return render(request, "network/followposts.html", {
+            "Posts": getPosts,
+            "user": request.user,
+        })
+    else:
+        return HttpResponseRedirect(reverse("login"))  # Redirect to login if not authenticated

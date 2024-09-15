@@ -1,60 +1,86 @@
 {% extends "auctions/layout.html" %}
 {% load static %}
 {% block body %}
+
+<div class="container mt-5 d-flex flex-column align-items-center">
+    <!-- Winning message -->
     {% if user.username == mc.bid.bidder and mc.active == False %}
-    <h1>YOU WON!!!</h1>
-    <h1>{{ user.name }}</h1>
-    {% endif%}
-    <h1>{{ ms }}</h1>
-    <div class="card listing" style="width: 18rem;">
+        <div class="alert alert-success text-center w-75">
+            <h1>YOU WON!!!</h1>
+            <h2>{{ user.name }}</h2>
+        </div>
+    {% endif %}
+
+    <!-- Auction item card -->
+    <div class="card mb-4" style="max-width: 24rem;">
         <img src="{{ mc.image }}" class="card-img-top" alt="{{ mc.title }}">
         <div class="card-body">
-          <h5 class="card-title">{{mc.title}}</h5>
-          <p class="card-text">{{ mc.description }}</p>
+            <h5 class="card-title">{{ mc.title }}</h5>
+            <p class="card-text">{{ mc.description }}</p>
         </div>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item">Price:{{ mc.bid.bid_price }}$</li>
+            <li class="list-group-item">
+                <strong>Current Price: </strong> {{ mc.bid.bid_price }}$
+            </li>
         </ul>
+
+        <!-- Bidding and actions -->
         {% if user.is_authenticated and mc.active == True %}
         <div class="card-body">
-          <div class="card-body">
-            <form action="{% url 'bid' t=mc.title %}"method="post">
-              {% csrf_token %}
-              <input type="number" name="money">
-              <button type="submit" class="btn btn-primary">Bid</button>
+            <form action="{% url 'bid' t=mc.title %}" method="post" class="mb-3">
+                {% csrf_token %}
+                <div class="input-group">
+                    <input type="number" name="money" class="form-control" placeholder="Enter bid amount" required>
+                    <button type="submit" class="btn btn-primary">Place Bid</button>
+                </div>
             </form>
+
+            <!-- Comment form -->
             <form action="{% url 'comment' t=mc.title %}" method="post">
-              {% csrf_token %}
-            <textarea class="form-control" id="exampleFormControlTextarea1" name="comment"></textarea>
-            <button type="sumnit" class="btn btn-primary">Place comment</button>
-          </form>
-          </div>
-          <div class="modal-footer">
-            {%if isw == True and mc.active == True  %}
-            <form action="{% url 'removeFromWatchlist' id=mc.title %}" method="POST">
-              {% csrf_token %}
-              <button type="submit" class="btn btn-danger">Remove from watchlist</button>
+                {% csrf_token %}
+                <div class="form-group mb-3">
+                    <textarea class="form-control" id="exampleFormControlTextarea1" name="comment" rows="3" placeholder="Leave a comment"></textarea>
+                </div>
+                <button type="submit" class="btn btn-secondary">Submit Comment</button>
             </form>
-            {% elif mc.active == True  %}
-            <form action="{% url 'addToWatchlist' id=mc.title %}" method="POST" >
-              {% csrf_token %}
-              <button type="submit" class="btn btn-info">Ad to watchlist</button>
-            </form>
-            {% endif %}
-            {% if user == mc.owner %}
-            <form action="{% url 'closeauc' t=mc.title %}" method="post" >
-              {% csrf_token %}
-            <button type="submit" class="btn btn-warning">Close auctions</button>
-            </form>
-            {% endif %}
-          </div>
+
+            <!-- Watchlist and Close Auction -->
+            <div class="d-flex justify-content-between mt-4">
+                {% if isw == True and mc.active == True %}
+                <form action="{% url 'removeFromWatchlist' id=mc.title %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger">Remove from Watchlist</button>
+                </form>
+                {% elif mc.active == True %}
+                <form action="{% url 'addToWatchlist' id=mc.title %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-info">Add to Watchlist</button>
+                </form>
+                {% endif %}
+
+                {% if user == mc.owner %}
+                <form action="{% url 'closeauc' t=mc.title %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-warning">Close Auction</button>
+                </form>
+                {% endif %}
+            </div>
         </div>
-          {% endif %}
-      </div>
-      <div>
-        {% for comment in comments %}
-        <h1>User:{{comment.writer}}</h1>
-        <h2>Said:{{comment.comment}}</h2>
-        {% endfor %}
-      </div>
+        {% endif %}
+    </div>
+
+    <!-- Comments Section -->
+    <div class="mt-4 w-75">
+        <h3 class="mb-3">Comments</h3>
+        <div class="list-group">
+            {% for comment in comments %}
+            <div class="list-group-item">
+                <h5 class="mb-1">{{ comment.writer }}</h5>
+                <p class="mb-1">{{ comment.comment }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
 {% endblock %}
